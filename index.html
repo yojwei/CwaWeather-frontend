@@ -264,7 +264,10 @@
         <p style="color: white; font-weight: bold; margin-top: 20px;">正在觀測雲的流動...</p>
     </div>
     <div class="status-bar">
-        <div class="location-pill">📍 高雄</div>
+        <select id="citySelect" class="location-pill"
+            style="border: 2px solid white; background: var(--ac-yellow); color: var(--ac-brown); padding: 5px 15px; border-radius: 20px; font-weight: 900; font-size: 1.1rem; cursor: pointer; font-family: 'Zen Maru Gothic', sans-serif;">
+            <option value="kaohsiung">📍 高雄</option>
+        </select>
         <div id="updateTime" class="update-pill">更新中...</div>
     </div>
 
@@ -280,7 +283,9 @@
     </div>
 
     <script>
-        const API_URL = "https://cwa-backend-api.zeabur.app/api/weather/kaohsiung";
+        let currentCity = "kaohsiung";
+        const CITIES_API = "https://yojwei-cwa-weather.zeabur.app/api/cities";
+        const WEATHER_API_BASE = "https://yojwei-cwa-weather.zeabur.app/api/weather";
 
         function getWeatherIcon(weather) {
             if (!weather) return "🌤️";
@@ -392,16 +397,48 @@
             document.getElementById('updateTime').textContent = `${month}月${date}日 ${days[dayIndex]}`;
         }
 
+        async function loadCities() {
+            try {
+                const res = await fetch(CITIES_API);
+                const json = await res.json();
+
+                if (json.success && json.data) {
+                    const select = document.getElementById('citySelect');
+                    select.innerHTML = '';
+
+                    json.data.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city.code;
+                        option.textContent = `📍 ${city.name}`;
+                        if (city.code === currentCity) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    });
+
+                    // 綁定城市選擇事件
+                    select.addEventListener('change', (e) => {
+                        currentCity = e.target.value;
+                        document.getElementById('loading').style.display = 'flex';
+                        document.getElementById('mainContent').style.display = 'none';
+                        fetchWeather();
+                    });
+                }
+            } catch (e) {
+                console.error("載入城市列表失敗", e);
+            }
+        }
+
         async function fetchWeather() {
             try {
                 // 1. 定義「最低等待時間」：1500 毫秒 (1.5秒)
                 const delayPromise = new Promise(resolve => setTimeout(resolve, 1500));
 
                 // 2. 定義「抓取資料」的工作
-                const fetchPromise = fetch(API_URL).then(res => res.json());
+                const weatherUrl = `${WEATHER_API_BASE}/${currentCity}`;
+                const fetchPromise = fetch(weatherUrl).then(res => res.json());
 
                 // 3. Promise.all 會等待「兩個都完成」才會往下走
-                // result 陣列裡，第一個是 delay 的結果(沒用到)，第二個是 api 的 json 資料
                 const [_, json] = await Promise.all([delayPromise, fetchPromise]);
 
                 if (json.success) {
@@ -419,7 +456,10 @@
             }
         }
 
-        document.addEventListener("DOMContentLoaded", fetchWeather);
+        document.addEventListener("DOMContentLoaded", () => {
+            loadCities();
+            fetchWeather();
+        });
     </script>
 </body>
 
