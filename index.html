@@ -266,7 +266,7 @@
     <div class="status-bar">
         <select id="citySelect" class="location-pill"
             style="border: 2px solid white; background: var(--ac-yellow); color: var(--ac-brown); padding: 5px 15px; border-radius: 20px; font-weight: 900; font-size: 1.1rem; cursor: pointer; font-family: 'Zen Maru Gothic', sans-serif;">
-            <option value="kaohsiung">📍 高雄</option>
+            <option value="taichung">📍 台中</option>
         </select>
         <div id="updateTime" class="update-pill">更新中...</div>
     </div>
@@ -283,7 +283,8 @@
     </div>
 
     <script>
-        let currentCity = "kaohsiung";
+        // 從 localStorage 讀取或使用預設值（台中）
+        let currentCity = localStorage.getItem('selectedCity') || 'taichung';
         const CITIES_API = "https://yojwei-cwa-weather.zeabur.app/api/cities";
         const WEATHER_API_BASE = "https://yojwei-cwa-weather.zeabur.app/api/weather";
 
@@ -419,6 +420,7 @@
                     // 綁定城市選擇事件
                     select.addEventListener('change', (e) => {
                         currentCity = e.target.value;
+                        localStorage.setItem('selectedCity', currentCity);
                         document.getElementById('loading').style.display = 'flex';
                         document.getElementById('mainContent').style.display = 'none';
                         fetchWeather();
