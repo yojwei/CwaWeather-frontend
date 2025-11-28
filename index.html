@@ -10,19 +10,29 @@
     <link rel="apple-touch-icon" sizes="180x180" href="./icon-v2.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
         rel="stylesheet">
 
     <style>
         :root {
-            --ac-green: #7DE1A9;
-            --ac-bg-pattern: #8FD8AF;
-            --ac-cream: #FFFEF2;
-            --ac-yellow: #F9F195;
-            --ac-brown: #796452;
-            --ac-blue: #4FB5D9;
-            --ac-dark: #58504A;
-            --ac-card-border: #E6E0C8;
+            /* 水彩速寫風格配色 */
+            --wc-paper: #fdfbf7;
+            --wc-stroke: #5e5045;
+            /* 褐色墨水感 */
+            --wc-wash-green: #e3f2c1;
+            --wc-wash-blue: #d6eaf8;
+            --wc-wash-yellow: #fef9e7;
+            --wc-wash-accent: #fad7a0;
+
+            /* 兼容舊變數 */
+            --ac-green: var(--wc-wash-green);
+            --ac-bg-pattern: #e0e0e0;
+            --ac-cream: #ffffff;
+            --ac-yellow: var(--wc-wash-accent);
+            --ac-brown: var(--wc-stroke);
+            --ac-blue: #85c1e9;
+            --ac-dark: var(--wc-stroke);
+            --ac-card-border: var(--wc-stroke);
         }
 
         * {
@@ -33,14 +43,15 @@
         }
 
         body {
-            font-family: 'Zen Maru Gothic', sans-serif;
-            background-color: var(--ac-green);
-            /* 更細緻的斜紋背景 */
+            font-family: 'Yomogi', 'Zen Maru Gothic', sans-serif;
+            background-color: var(--wc-paper);
+            /* 水彩暈染背景 */
             background-image:
-                repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255, 255, 255, 0.2) 20px, rgba(255, 255, 255, 0.2) 40px);
+                radial-gradient(circle at 0% 0%, rgba(227, 242, 193, 0.6) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(214, 234, 248, 0.6) 0%, transparent 50%),
+                url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
             min-height: 100vh;
             color: var(--ac-dark);
-            /* 防止 iOS 左右滑動 */
             overflow-x: hidden;
             padding-bottom: 20px;
         }
@@ -51,65 +62,74 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
             position: sticky;
             top: 0;
             z-index: 100;
+            /* 水彩邊緣 */
+            border-bottom: 1px solid rgba(94, 80, 69, 0.2);
         }
 
         .location-pill {
             background: var(--ac-yellow);
             color: var(--ac-brown);
             padding: 5px 15px;
-            border-radius: 20px;
+            /* 手繪不規則圓角 */
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
             font-weight: 900;
-            font-size: 1.1rem;
-            transform: rotate(-2deg);
-            border: 2px solid white;
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+            font-size: 1.2rem;
+            transform: rotate(-1deg);
+            border: 2px solid var(--wc-stroke);
+            /* 水彩邊緣暈染 */
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            font-family: 'Yomogi', sans-serif;
         }
 
         .update-pill {
-            font-size: 0.8rem;
-            color: white;
-            background: rgba(0, 0, 0, 0.2);
+            font-size: 0.9rem;
+            color: var(--ac-dark);
+            background: rgba(255, 255, 255, 0.8);
             padding: 4px 10px;
-            border-radius: 12px;
+            border: 1px solid var(--wc-stroke);
+            border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
         }
 
         .container {
             padding: 20px;
             max-width: 600px;
-            /* 限制在大手機寬度 */
             margin: 0 auto;
         }
 
         /* === 核心：今日焦點卡片 === */
         .hero-card {
-            background: var(--ac-cream);
-            border-radius: 35px;
+            background: white;
+            /* 水彩暈染效果 */
+            background-image: radial-gradient(circle at 50% 30%, var(--wc-wash-yellow), transparent 70%);
+            border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
             padding: 30px 25px;
             text-align: center;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            border: 4px solid white;
+            /* 柔和陰影 */
+            box-shadow: 0 10px 20px rgba(94, 80, 69, 0.1);
+            border: 2px solid var(--wc-stroke);
             margin-bottom: 25px;
             position: relative;
         }
 
-        /* 像動森的對話氣泡 */
+        /* 標籤貼紙 */
         .hero-period {
             position: absolute;
             top: -15px;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) rotate(-2deg);
             background: var(--ac-blue);
             color: white;
             padding: 5px 20px;
-            border-radius: 20px;
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
             font-weight: bold;
-            border: 3px solid white;
-            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--wc-stroke);
+            box-shadow: 2px 2px 0 rgba(94, 80, 69, 0.2);
         }
 
         .hero-temp-container {
@@ -122,8 +142,10 @@
 
         .hero-icon {
             font-size: 5rem;
-            filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.1));
+            /* 水彩暈染陰影 */
+            filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.1));
             animation: bounce 3s infinite;
+            opacity: 0.9;
         }
 
         @keyframes bounce {
@@ -143,11 +165,13 @@
             font-weight: 900;
             color: var(--ac-brown);
             line-height: 1;
+            /* 模擬墨水不均勻 */
+            opacity: 0.9;
         }
 
         .hero-desc {
-            font-size: 1.5rem;
-            color: #8A7B70;
+            font-size: 1.8rem;
+            color: var(--ac-dark);
             margin-bottom: 20px;
             font-weight: bold;
         }
@@ -159,16 +183,18 @@
             gap: 15px;
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 2px dashed #E0D8C0;
+            border-top: 2px dashed rgba(94, 80, 69, 0.3);
         }
 
         .advice-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: rgba(255, 255, 255, 0.5);
-            padding: 10px;
-            border-radius: 20px;
+            background: white;
+            padding: 15px;
+            border: 1px solid var(--wc-stroke);
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.05);
         }
 
         .advice-icon {
@@ -186,20 +212,23 @@
 
         /* === 稍後預報：橫向滑動區 === */
         .section-title {
-            font-size: 1.2rem;
-            color: white;
+            font-size: 1.5rem;
+            color: var(--ac-dark);
             margin-bottom: 15px;
             margin-left: 10px;
             font-weight: 900;
-            text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+            /* 水彩筆觸背景 */
+            background: linear-gradient(120deg, rgba(250, 215, 160, 0) 0%, rgba(250, 215, 160, 0.6) 20%, rgba(250, 215, 160, 0.3) 100%);
+            display: inline-block;
+            padding: 0 10px;
+            border-radius: 10px;
         }
 
         .scroll-container {
             display: flex;
             overflow-x: auto;
             gap: 15px;
-            padding-bottom: 10px;
-            /* 隱藏滾動條但保留功能 */
+            padding-bottom: 15px;
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
@@ -210,21 +239,23 @@
 
         .mini-card {
             min-width: 140px;
-            background: rgba(255, 255, 255, 0.85);
-            border-radius: 25px;
+            background: white;
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
             padding: 20px 15px;
             text-align: center;
-            border: 3px solid white;
+            border: 1px solid var(--wc-stroke);
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.05);
             flex-shrink: 0;
-            /* 防止被擠壓 */
+            /* 每個卡片有輕微不同的背景暈染 */
+            background-image: linear-gradient(135deg, white 0%, var(--wc-wash-blue) 100%);
         }
 
         .mini-time {
-            background: var(--ac-green);
+            background: var(--wc-stroke);
             color: white;
             padding: 3px 10px;
-            border-radius: 10px;
-            font-size: 0.8rem;
+            border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+            font-size: 0.9rem;
             display: inline-block;
             margin-bottom: 10px;
             font-weight: bold;
@@ -233,6 +264,7 @@
         .mini-icon {
             font-size: 2.5rem;
             margin: 5px 0;
+            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.1));
         }
 
         .mini-temp {
@@ -248,12 +280,15 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: var(--ac-green);
+            background: var(--wc-paper);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 999;
+            background-image:
+                radial-gradient(circle at 50% 50%, rgba(227, 242, 193, 0.8) 0%, transparent 70%),
+                url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
         }
     </style>
 </head>
