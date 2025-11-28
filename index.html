@@ -54,6 +54,27 @@
             color: var(--ac-dark);
             overflow-x: hidden;
             padding-bottom: 20px;
+            background-size: cover, cover, 200px, contain;
+            background-position: center, center, center, center;
+            background-repeat: no-repeat, no-repeat, repeat, no-repeat;
+            background-attachment: fixed, fixed, fixed, fixed;
+            transition: background-image 0.8s ease-in-out;
+        }
+
+        /* 城市浮水印背景 */
+        .city-watermark {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: -1;
+            transition: all 0.8s ease-in-out;
         }
 
         /* 頂部狀態列 */
@@ -300,13 +321,14 @@
 </head>
 
 <body>
+    <div id="cityWatermark" class="city-watermark"></div>
     <div id="loading" class="loading-screen">
         <div style="font-size: 4rem; animation: bounce 2s infinite;">☁️</div>
         <p style="color: var(--wc-stroke); font-weight: bold; margin-top: 20px;">天氣怎麼了？正在檢查中...</p>
     </div>
     <div class="status-bar">
         <select id="citySelect" class="location-pill">
-            <option value="taichung">台中</option>
+            <!-- 城市選項將由 API 動態載入 -->
         </select>
         <div id="updateTime" class="update-pill">更新中...</div>
     </div>
@@ -327,6 +349,53 @@
         let currentCity = localStorage.getItem('selectedCity') || 'taichung';
         const CITIES_API = "https://yojwei-cwa-weather.zeabur.app/api/cities";
         const WEATHER_API_BASE = "https://yojwei-cwa-weather.zeabur.app/api/weather";
+
+        // 城市背景圖片對應（根據 API 回傳的城市代碼）
+        const CITY_BACKGROUNDS = {
+            // 直轄市
+            'taipei': './images/Taipei_101_Taipei_Taiwan.png',
+            'newtaipei': './images/Jiufen_Old_Street_New_Taipei_Taiwan.png',
+            'keelung': './images/Heping_Island_Park_Keelung_Taiwan.png',
+            'taoyuan': './images/Shimen_Reservoir_Taoyuan_Taiwan.png',
+            'hsinchu': './images/Hsinchu_Cheng_Temple_Hsinchu_Taiwan.png',
+            'taichung': './images/Gaomei_Wetlands_Taichung_Taiwan.png',
+            'chiayi': './images/Hinoki_Village_Chiayi_Taiwan.png',
+            'tainan': './images/Anping_Fort_Tainan_Taiwan.png',
+            'kaohsiung': './images/Pier_2_Art_Center_Kaohsiung_Taiwan.png',
+
+            // 縣
+            'hsinchucounty': './images/Hsinchu_Cheng_Temple_Hsinchu_Taiwan.png',
+            'miaoli': './images/Baishatun_Gongtian_Temple_Miaoli_Taiwan.png',
+            'changhua': './images/Lukang_Old_Town_Changhua_Taiwan.png',
+            'nantou': './images/Sun_Moon_Lake_Nantou_Taiwan_v2.png',
+            'yunlin': './images/Beigang_Chaotian_Temple_Yunlin_Taiwan.png',
+            'chiayicounty': './images/Alishan_Forest_Railway_Chiayi_Taiwan.png',
+            'pingtung': './images/Kenting_Art_Center_Pingtung_Taiwan.png',
+            'yilan': './images/Guishan_Island_Yilan_Taiwan.png',
+            'hualien': './images/Taroko_National_Park_Hualien_Taiwan.png',
+            'taitung': './images/Sanskaxaintati_Taitung_Taiwan.png',
+            'penghu': './images/Twin_Hearts_Stone_Penghu_Taiwan.png',
+            'kinmen': './images/Zhaishan_Tunnel_Kinmen_Taiwan.png',
+            'lienchiang': './images/Dongyin_Lighthouse_Lienchiang_Taiwan.png',
+
+            'default': './images/Taipei_101_Taipei_Taiwan.png'
+        };
+
+        // 設定城市背景
+        function setCityBackground(cityCode) {
+            const watermarkElement = document.getElementById('cityWatermark');
+            let backgroundImage = CITY_BACKGROUNDS[cityCode] || CITY_BACKGROUNDS['default'];
+
+            // 簡單的模糊比對
+            if (!CITY_BACKGROUNDS[cityCode]) {
+                const key = Object.keys(CITY_BACKGROUNDS).find(k =>
+                    cityCode.toLowerCase().includes(k) || k.includes(cityCode.toLowerCase())
+                );
+                if (key) backgroundImage = CITY_BACKGROUNDS[key];
+            }
+
+            watermarkElement.style.backgroundImage = `url('${backgroundImage}')`;
+        }
 
         function getWeatherIcon(weather) {
             if (!weather) return "🌤️";
@@ -377,6 +446,9 @@
             const advice = getAdvice(current.rain, current.maxTemp);
             const period = getTimePeriod(current.startTime);
             const avgTemp = Math.round((parseInt(current.maxTemp) + parseInt(current.minTemp)) / 2);
+
+            // 設定城市背景
+            setCityBackground(currentCity);
 
             document.getElementById('heroCard').innerHTML = `
                         <div class="hero-card">
@@ -461,6 +533,7 @@
                     select.addEventListener('change', (e) => {
                         currentCity = e.target.value;
                         localStorage.setItem('selectedCity', currentCity);
+                        setCityBackground(currentCity);
                         document.getElementById('loading').style.display = 'flex';
                         document.getElementById('mainContent').style.display = 'none';
                         fetchWeather();
@@ -499,6 +572,7 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
+            setCityBackground(currentCity);
             loadCities();
             fetchWeather();
         });
