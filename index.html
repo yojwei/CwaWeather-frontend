@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>森森天氣</title>
+    <title>天氣怎麼了</title>
     <link rel="icon" type="image/png" href="./icon-v2.png">
     <link rel="apple-touch-icon" href="./icon-v2.png">
     <link rel="apple-touch-icon" sizes="180x180" href="./icon-v2.png">
@@ -302,7 +302,7 @@
 <body>
     <div id="loading" class="loading-screen">
         <div style="font-size: 4rem; animation: bounce 2s infinite;">☁️</div>
-        <p style="color: var(--wc-stroke); font-weight: bold; margin-top: 20px;">正在觀測雲的流動...</p>
+        <p style="color: var(--wc-stroke); font-weight: bold; margin-top: 20px;">天氣怎麼了？正在檢查中...</p>
     </div>
     <div class="status-bar">
         <select id="citySelect" class="location-pill">
@@ -316,7 +316,7 @@
         <div id="heroCard">
         </div>
 
-        <h3 class="section-title">稍後預報</h3>
+        <h3 class="section-title">接下來怎麼樣？</h3>
         <div class="scroll-container" id="futureForecasts">
         </div>
 
@@ -494,7 +494,7 @@
                 }
             } catch (e) {
                 console.error(e);
-                alert("天氣資料讀取失敗，狸克把網路線咬斷了！");
+                alert("天氣怎麼了？資料讀取失敗，請稍後再試！");
             }
         }
 
