@@ -318,7 +318,9 @@
                 url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
         }
 
-        /* RWD 小螢幕優化 */
+        /* === RWD 響應式設計斷點 === */
+
+        /* 1. 一般手機 (480px 以下) */
         @media (max-width: 480px) {
             .status-bar {
                 padding: 10px 15px;
@@ -339,10 +341,7 @@
                 padding: 20px 15px;
             }
 
-            .hero-icon {
-                font-size: 3.5rem;
-            }
-
+            .hero-icon,
             .hero-temp {
                 font-size: 3.5rem;
             }
@@ -365,7 +364,7 @@
             }
         }
 
-        /* 針對 375px 以下的手機，改為垂直排列且滿版 */
+        /* 2. 中小型手機 (375px 以下) - 改為垂直排列 */
         @media (max-width: 375px) {
             .scroll-container {
                 flex-direction: column;
@@ -375,6 +374,37 @@
             .mini-card {
                 width: 100%;
                 min-width: auto;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* 3. 極小螢幕 (360px 以下) - 針對舊款手機與摺疊機 */
+        @media (max-width: 360px) {
+            .status-bar {
+                padding: 10px 5px;
+                gap: 5px;
+            }
+
+            .location-pill {
+                max-width: 130px;
+                font-size: 0.9rem;
+                padding: 5px 5px 5px 25px;
+                transform: none;
+                /* 取消旋轉以節省空間 */
+            }
+
+            .update-pill {
+                font-size: 0.75rem;
+                padding: 3px 6px;
+            }
+
+            .hero-icon,
+            .hero-temp {
+                font-size: 2.8rem;
+            }
+
+            .advice-text {
+                font-size: 1rem;
             }
         }
     </style>
