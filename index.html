@@ -72,19 +72,25 @@
         }
 
         .location-pill {
-            background: var(--ac-yellow);
-            color: var(--ac-brown);
-            padding: 5px 15px;
+            background-color: var(--ac-blue);
+            color: white;
+            padding: 5px 15px 5px 35px;
             /* 手繪不規則圓角 */
             border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
             font-weight: 900;
             font-size: 1.2rem;
             transform: rotate(-1deg);
-            border: 2px solid var(--wc-stroke);
+            border: 2px solid white;
             /* 水彩邊緣暈染 */
             box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5);
             cursor: pointer;
-            font-family: 'Yomogi', sans-serif;
+            font-family: 'Zen Maru Gothic', sans-serif;
+
+            /* Location Icon */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23F4511E' d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z'/%3E%3Ccircle cx='12' cy='9' r='2.5' fill='white'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 10px center;
+            background-size: 20px;
         }
 
         .update-pill {
@@ -299,9 +305,8 @@
         <p style="color: var(--wc-stroke); font-weight: bold; margin-top: 20px;">正在觀測雲的流動...</p>
     </div>
     <div class="status-bar">
-        <select id="citySelect" class="location-pill"
-            style="border: 2px solid white; background: var(--ac-yellow); color: var(--ac-brown); padding: 5px 15px; border-radius: 20px; font-weight: 900; font-size: 1.1rem; cursor: pointer; font-family: 'Zen Maru Gothic', sans-serif;">
-            <option value="taichung">📍 台中</option>
+        <select id="citySelect" class="location-pill">
+            <option value="taichung">台中</option>
         </select>
         <div id="updateTime" class="update-pill">更新中...</div>
     </div>
@@ -445,7 +450,7 @@
                     json.data.forEach(city => {
                         const option = document.createElement('option');
                         option.value = city.code;
-                        option.textContent = `📍 ${city.name}`;
+                        option.textContent = city.name;
                         if (city.code === currentCity) {
                             option.selected = true;
                         }
