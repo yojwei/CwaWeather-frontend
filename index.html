@@ -365,6 +365,19 @@
             }
         }
 
+        /* 針對 375px 以下的手機，改為垂直排列且滿版 */
+        @media (max-width: 375px) {
+            .scroll-container {
+                flex-direction: column;
+                overflow-x: hidden;
+            }
+
+            .mini-card {
+                width: 100%;
+                min-width: auto;
+            }
+        }
+
         /* 針對 320px 極小螢幕的額外優化 */
         @media (max-width: 350px) {
             .status-bar {
